@@ -1,0 +1,24 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class Epic extends Task {
+    protected List<Integer> subTasksId = new ArrayList<>();
+
+    public Epic(String name, String description) {
+        super(name, description);
+        this.type = Type.EPIC;
+    }
+
+    public List<Integer> getSubTasksId() {
+        return subTasksId;
+    }
+
+    public void setSubTasksId(int id) {
+        subTasksId.add(id);
+    }
+
+    @Override
+    public Type getType() {
+        return Type.EPIC;
+    }
+}
