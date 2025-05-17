@@ -1,4 +1,6 @@
-import java.util.ArrayList;
+package tasks;
+
+import managers.Manager;
 
 public class Task {
     protected String name;
@@ -40,4 +42,14 @@ public class Task {
         return type;
     }
 
+    @Override
+    public String toString() {
+        return "\nTask{" +
+                "\nname='" + name + '\'' +
+                ", \ndescription='" + description + '\'' +
+                ", \nid=" + id +
+                ", \nstatus=" + status +
+                ", \ntype=" + type +
+                '}';
+    }
 }

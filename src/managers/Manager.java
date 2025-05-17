@@ -1,16 +1,25 @@
+package managers;
+
+import tasks.Epic;
+import tasks.Status;
+import tasks.SubTask;
+import tasks.Task;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Manager implements InManager {
-    private HashMap<Integer,Task> tasks = new HashMap<>();
-    private HashMap<Integer,Epic> epics = new HashMap<>();
-    private HashMap<Integer,SubTask> subTasks = new HashMap<>();
+    private final Map<Integer, Task> tasks = new HashMap<>();
+    private final Map<Integer, Epic> epics = new HashMap<>();
+    private final Map<Integer, SubTask> subTasks = new HashMap<>();
     private static int nextId = 0;
 
     public static int getNextId() {
         nextId++;
         return nextId;
     }
-
 
     private void updateEpicStatus(Epic epic) {
         if (epic.getSubTasksId().isEmpty()) {
@@ -41,11 +50,11 @@ public class Manager implements InManager {
     }
 
     @Override
-    public HashMap<Integer, Task> getTasks() {
+    public List<Task> getTasks() {
         if (!tasks.isEmpty()) {
-            return tasks;
+            return new ArrayList<>(tasks.values());
         } else {
-            return new HashMap<>();
+            return new ArrayList<>();
         }
     }
 
@@ -77,17 +86,15 @@ public class Manager implements InManager {
 
     @Override
     public void deleteTaskForId(int id) {
-        if (tasks.containsKey(id)) {
-            tasks.remove(id);
-        }
+        tasks.remove(id);
     }
 
     @Override
-    public HashMap<Integer, Epic> getEpics() {
+    public List<Epic> getEpics() {
         if (!epics.isEmpty()) {
-            return epics;
+            return new ArrayList<>(epics.values());
         } else {
-            return new HashMap<>();
+            return new ArrayList<>();
         }
     }
 
@@ -129,26 +136,34 @@ public class Manager implements InManager {
     }
 
     @Override
-    public HashMap<Integer, SubTask> getSubTasksForEpic(Epic epic) {
-        HashMap<Integer, SubTask> result = new HashMap<>();
-        for (Integer subTaskId : epic.getSubTasksId()) {
-            result.put(subTaskId, subTasks.get(subTaskId));
+    public List<SubTask> getSubTasksForEpic(Epic epic) {
+        List<SubTask> result = new ArrayList<>();
+        if (!epic.getSubTasksId().isEmpty()){
+            for (Integer subTaskId : epic.getSubTasksId()) {
+                if (subTasks.containsKey(subTaskId)) {
+                    result.add(subTasks.get(subTaskId));
+                }
+            }
         }
         return result;
     }
 
     @Override
-    public HashMap<Integer, SubTask> getSubTasks() {
+    public List<SubTask> getSubTasks() {
         if (!subTasks.isEmpty()) {
-            return subTasks;
+            return new ArrayList<>(subTasks.values());
         } else {
-            return new HashMap<>();
+            return new ArrayList<>();
         }
     }
 
     @Override
     public void deleteSubTasks() {
         if (!subTasks.isEmpty()) {
+            for (Epic epic : epics.values()) {
+                epic.getSubTasksId().clear();
+                updateEpicStatus(epic);
+            }
             subTasks.clear();
         }
     }
@@ -171,7 +186,6 @@ public class Manager implements InManager {
     public void updateSubTask(SubTask subTask) {
         if (subTask != null && subTasks.containsKey(subTask.getId())) {
             subTasks.put(subTask.getId(),subTask);
-            epics.get(subTask.getEpicId()).setSubTasksId(subTask.getId());
             updateEpicStatus(epics.get(subTask.getEpicId()));
         }
     }
