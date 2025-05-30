@@ -26,14 +26,15 @@ public class InMemoryTaskManager implements TaskManager {
             boolean anyInProgress = false;
 
             for (Integer subTaskId : epic.getSubTasksId()) {
-                if (subTasks.get(subTaskId).getStatus() == Status.NEW) {
+                Status statusSubTask = subTasks.get(subTaskId).getStatus();
+                if (statusSubTask == Status.NEW) {
                     epic.setStatus(Status.NEW);
                     return;
                 }
-                if (subTasks.get(subTaskId).getStatus() == Status.IN_PROGRESS) {
+                if (statusSubTask == Status.IN_PROGRESS) {
                     anyInProgress = true;
                 }
-                if (subTasks.get(subTaskId).getStatus() != Status.DONE) {
+                if (statusSubTask != Status.DONE) {
                     allDone = false;
                 }
             }
@@ -51,7 +52,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (!tasks.isEmpty()) {
             return new ArrayList<>(tasks.values());
         } else {
-            return new ArrayList<>();
+            return List.of();
         }
     }
 
@@ -70,7 +71,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int createTask(Task task) {
-        if (task != null) {
+        if (task != null && task.getType() == Type.TASK) {
             tasks.put(task.getId(), task);
             return task.getId();
         }
@@ -79,7 +80,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int updateTask(Task task) {
-        if (task != null && tasks.containsKey(task.getId())){
+        if (task != null && task.getType() == Type.TASK && tasks.containsKey(task.getId())){
             tasks.put(task.getId(),task);
             return task.getId();
         }
@@ -96,7 +97,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (!epics.isEmpty()) {
             return new ArrayList<>(epics.values());
         } else {
-            return new ArrayList<>();
+            return List.of();
         }
     }
 
@@ -116,7 +117,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int createEpic(Epic epic) {
-        if (epic != null) {
+        if (epic != null && epic.getType() == Type.EPIC) {
             epics.put(epic.getId(),epic);
             return epic.getId();
         }
@@ -125,7 +126,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int updateEpic(Epic epic) {
-        if (epic != null && epics.containsKey(epic.getId())) {
+        if (epic != null && epic.getType() == Type.EPIC && epics.containsKey(epic.getId())) {
             epics.put(epic.getId(),epic);
             return epic.getId();
         }
@@ -160,7 +161,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (!subTasks.isEmpty()) {
             return new ArrayList<>(subTasks.values());
         } else {
-            return new ArrayList<>();
+            return List.of();
         }
     }
 
@@ -183,7 +184,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int createSubTask(SubTask subTask) {
-        if (subTask != null) {
+        if (subTask != null && subTask.getType() == Type.SUBTASK) {
             subTasks.put(subTask.getId(),subTask);
             epics.get(subTask.getEpicId()).setSubTasksId(subTask);
             updateEpicStatus(epics.get(subTask.getEpicId()));
@@ -194,7 +195,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int updateSubTask(SubTask subTask) {
-        if (subTask != null && subTasks.containsKey(subTask.getId())) {
+        if (subTask != null && subTask.getType() == Type.SUBTASK && subTasks.containsKey(subTask.getId())) {
             subTasks.put(subTask.getId(),subTask);
             updateEpicStatus(epics.get(subTask.getEpicId()));
             return subTask.getId();
