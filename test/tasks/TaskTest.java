@@ -17,7 +17,7 @@ class TaskTest {
         taskManager = Managers.getDefault();
     }
     @Test
-    public void addNewTaskEqualsTask() {
+    public void addNewTaskTest() {
         Task task = new Task("Задача 1", "Описание первой задачи");
         taskManager.createTask(task);
         final Task task1 = taskManager.getTask(task.getId());
@@ -38,7 +38,21 @@ class TaskTest {
         taskManager.createTask(task);
         taskManager.getTask(task.getId());
         final List<Task> history = taskManager.getHistory();
+
         assertNotNull(history, "После получения задачи, история не должна быть пустой.");
         assertEquals(1, history.size(), "После получения задачи, история не должна быть пустой.");
+
+        Epic epic = new Epic("Эпик 1", "Описание эпика 1");
+        taskManager.createEpic(epic);
+        taskManager.getEpic(epic.getId());
+
+        assertEquals(2, history.size(), "После получения 2 задач, история должна хранить 2 задачи.");
+
+        for (int i = 0; i < 10; i++) {
+            taskManager.getEpic(epic.getId());
+            taskManager.getTask(task.getId());
+        }
+
+        assertEquals(10, history.size(), "После получения 22 задач, история должна хранить 10 задач.");
     }
 }

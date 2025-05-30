@@ -20,7 +20,7 @@ public class Main {
         Epic epic1 = new Epic("Эпик 2","Описание Эпика 2");
         SubTask subTask2 = new SubTask("Подзадача 3","Описание подзадачи 3", epic1);
 
-        manager.createTask(task);
+        manager.createTask(epic);
         manager.createTask(task1);
         manager.createEpic(epic);
         manager.createSubTask(subTask);
