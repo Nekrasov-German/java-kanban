@@ -5,11 +5,11 @@ import tasks.SubTask;
 import tasks.Task;
 import java.util.List;
 
-public interface InManager {
+public interface TaskManager {
     List<Task> getTasks();
     void deleteTasks();
     Task getTask(int id);
-    void createTask(Task task);
+    int createTask(Task task);
     void updateTask(Task task);
     void deleteTaskForId(int id);
 
@@ -27,4 +27,6 @@ public interface InManager {
     void createSubTask(SubTask subTask);
     void updateSubTask(SubTask subTask);
     void deleteSubTaskForId(int id);
+
+    List<Task> getHistory();
 }

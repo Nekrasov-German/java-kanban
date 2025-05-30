@@ -3,10 +3,9 @@ package tasks;
 public class SubTask extends Task {
     protected int epicId;
 
-    public SubTask(String name, String description, int epicId) {
+    public SubTask(String name, String description, Epic epic) {
         super(name, description);
-        this.epicId = epicId;
-
+        this.epicId = epic.getId();
         this.type = Type.SUBTASK;
     }
 

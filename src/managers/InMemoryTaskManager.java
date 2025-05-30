@@ -1,19 +1,16 @@
 package managers;
 
-import tasks.Epic;
-import tasks.Status;
-import tasks.SubTask;
-import tasks.Task;
+import tasks.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class Manager implements InManager {
+public class InMemoryTaskManager implements TaskManager {
+    private final int ERROR_1 = -1;
+
     private final Map<Integer, Task> tasks = new HashMap<>();
     private final Map<Integer, Epic> epics = new HashMap<>();
     private final Map<Integer, SubTask> subTasks = new HashMap<>();
+    private final HistoryManager historyManager = Managers.getDefaultHistory();
     private static int nextId = 0;
 
     public static int getNextId() {
@@ -67,14 +64,17 @@ public class Manager implements InManager {
 
     @Override
     public Task getTask(int id) {
+        historyManager.add(tasks.get(id));
         return tasks.get(id);
     }
 
     @Override
-    public void createTask(Task task) {
+    public int createTask(Task task) {
         if (task != null) {
             tasks.put(task.getId(), task);
+            return task.getId();
         }
+        return ERROR_1;
     }
 
     @Override
@@ -108,6 +108,7 @@ public class Manager implements InManager {
 
     @Override
     public Epic getEpic(int id) {
+        historyManager.add(epics.get(id));
         return epics.get(id);
     }
 
@@ -170,6 +171,7 @@ public class Manager implements InManager {
 
     @Override
     public SubTask getSubTask(int id) {
+        historyManager.add(subTasks.get(id));
         return subTasks.get(id);
     }
 
@@ -177,7 +179,7 @@ public class Manager implements InManager {
     public void createSubTask(SubTask subTask) {
         if (subTask != null) {
             subTasks.put(subTask.getId(),subTask);
-            epics.get(subTask.getEpicId()).setSubTasksId(subTask.getId());
+            epics.get(subTask.getEpicId()).setSubTasksId(subTask);
             updateEpicStatus(epics.get(subTask.getEpicId()));
         }
     }
@@ -202,5 +204,9 @@ public class Manager implements InManager {
             }
             updateEpicStatus(epic);
         }
+    }
+    @Override
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
     }
 }
