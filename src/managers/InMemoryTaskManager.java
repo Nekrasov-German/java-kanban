@@ -5,7 +5,7 @@ import tasks.*;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
-    private final int ERROR1 = -1;
+    private static final int ERROR_ONE = -1;
 
     private final Map<Integer, Task> tasks = new HashMap<>();
     private final Map<Integer, Epic> epics = new HashMap<>();
@@ -75,7 +75,7 @@ public class InMemoryTaskManager implements TaskManager {
             tasks.put(task.getId(), task);
             return task.getId();
         }
-        return ERROR1;
+        return ERROR_ONE;
     }
 
     @Override
@@ -84,7 +84,7 @@ public class InMemoryTaskManager implements TaskManager {
             tasks.put(task.getId(),task);
             return task.getId();
         }
-        return ERROR1;
+        return ERROR_ONE;
     }
 
     @Override
@@ -122,7 +122,7 @@ public class InMemoryTaskManager implements TaskManager {
             epics.put(epic.getId(),epic);
             return epic.getId();
         }
-        return ERROR1;
+        return ERROR_ONE;
     }
 
     @Override
@@ -131,7 +131,7 @@ public class InMemoryTaskManager implements TaskManager {
             epics.put(epic.getId(),epic);
             return epic.getId();
         }
-        return ERROR1;
+        return ERROR_ONE;
     }
 
     @Override
@@ -193,7 +193,7 @@ public class InMemoryTaskManager implements TaskManager {
             updateEpicStatus(epics.get(subTask.getEpicId()));
             return subTask.getId();
         }
-        return ERROR1;
+        return ERROR_ONE;
     }
 
     @Override
@@ -203,7 +203,7 @@ public class InMemoryTaskManager implements TaskManager {
             updateEpicStatus(epics.get(subTask.getEpicId()));
             return subTask.getId();
         }
-        return ERROR1;
+        return ERROR_ONE;
     }
 
     @Override
