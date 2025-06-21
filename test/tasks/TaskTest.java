@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TaskTest {
     static TaskManager taskManager;
+    List<Task> history = List.of();
 
     @BeforeEach
     public void createManager() {
@@ -37,22 +38,29 @@ class TaskTest {
         Task task = new Task("Задача 1", "Описание первой задачи");
         taskManager.createTask(task);
         taskManager.getTask(task.getId());
-        final List<Task> history = taskManager.getHistory();
+        history = taskManager.getHistory();
 
         assertNotNull(history, "После получения задачи, история не должна быть пустой.");
         assertEquals(1, history.size(), "После получения задачи, история не должна быть пустой.");
 
+    }
+
+    @Test
+    void addIdenticalTaskTest() {
+        Task task = new Task("Задача 1", "Описание первой задачи");
         Epic epic = new Epic("Эпик 1", "Описание эпика 1");
+        taskManager.createTask(task);
         taskManager.createEpic(epic);
         taskManager.getEpic(epic.getId());
+        taskManager.getTask(task.getId());
 
-        assertEquals(2, history.size(), "После получения 2 задач, история должна хранить 2 задачи.");
+        taskManager.getEpic(epic.getId());
+        taskManager.getTask(task.getId());
 
-        for (int i = 0; i < 10; i++) {
-            taskManager.getEpic(epic.getId());
-            taskManager.getTask(task.getId());
-        }
+        history = taskManager.getHistory();
 
-        assertEquals(10, history.size(), "После получения 22 задач, история должна хранить 10 задач.");
+        assertEquals(2, history.size(),
+                "После получения одинаковых задач, история должна хранить уникальные задачи.");
+
     }
 }

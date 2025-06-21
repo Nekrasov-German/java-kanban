@@ -19,7 +19,7 @@ public class Main {
         Epic epic1 = new Epic("Эпик 2","Описание Эпика 2");
         SubTask subTask2 = new SubTask("Подзадача 3","Описание подзадачи 3", epic1);
 
-        manager.createTask(epic);
+        manager.createTask(task);
         manager.createTask(task1);
         manager.createEpic(epic);
         manager.createSubTask(subTask);
@@ -48,6 +48,19 @@ public class Main {
         }
         System.out.println("\n"+"-".repeat(15) + "\n");
         System.out.print("Размер истории просмотров : ");
+        System.out.println(manager.getHistory().size());
+        System.out.println("\n"+"-".repeat(15) + "\n");
+
+        manager.deleteSubTaskForId(subTask.getId());
+        manager.deleteSubTaskForId(subTask1.getId());
+        manager.deleteTaskForId(task.getId());
+
+        System.out.println("История просмотров после удаления:");
+        for (Task task2 : manager.getHistory()) {
+            System.out.println(task2);
+        }
+        System.out.println("\n"+"-".repeat(15) + "\n");
+        System.out.print("Размер истории просмотров после удаления : ");
         System.out.println(manager.getHistory().size());
         System.out.println("\n"+"-".repeat(15) + "\n");
 
