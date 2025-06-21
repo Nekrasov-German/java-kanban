@@ -5,7 +5,7 @@ import tasks.*;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
-    private final int ERROR_1 = -1;
+    private final int error_1 = -1;
 
     private final Map<Integer, Task> tasks = new HashMap<>();
     private final Map<Integer, Epic> epics = new HashMap<>();
@@ -75,16 +75,16 @@ public class InMemoryTaskManager implements TaskManager {
             tasks.put(task.getId(), task);
             return task.getId();
         }
-        return ERROR_1;
+        return error_1;
     }
 
     @Override
     public int updateTask(Task task) {
-        if (task != null && task.getType() == Type.TASK && tasks.containsKey(task.getId())){
+        if (task != null && task.getType() == Type.TASK && tasks.containsKey(task.getId())) {
             tasks.put(task.getId(),task);
             return task.getId();
         }
-        return ERROR_1;
+        return error_1;
     }
 
     @Override
@@ -122,7 +122,7 @@ public class InMemoryTaskManager implements TaskManager {
             epics.put(epic.getId(),epic);
             return epic.getId();
         }
-        return ERROR_1;
+        return error_1;
     }
 
     @Override
@@ -131,7 +131,7 @@ public class InMemoryTaskManager implements TaskManager {
             epics.put(epic.getId(),epic);
             return epic.getId();
         }
-        return ERROR_1;
+        return error_1;
     }
 
     @Override
@@ -149,7 +149,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<SubTask> getSubTasksForEpic(Epic epic) {
         List<SubTask> result = new ArrayList<>();
-        if (!epic.getSubTasksId().isEmpty()){
+        if (!epic.getSubTasksId().isEmpty()) {
             for (Integer subTaskId : epic.getSubTasksId()) {
                 if (subTasks.containsKey(subTaskId)) {
                     result.add(subTasks.get(subTaskId));
@@ -193,7 +193,7 @@ public class InMemoryTaskManager implements TaskManager {
             updateEpicStatus(epics.get(subTask.getEpicId()));
             return subTask.getId();
         }
-        return ERROR_1;
+        return error_1;
     }
 
     @Override
@@ -203,7 +203,7 @@ public class InMemoryTaskManager implements TaskManager {
             updateEpicStatus(epics.get(subTask.getEpicId()));
             return subTask.getId();
         }
-        return ERROR_1;
+        return error_1;
     }
 
     @Override
@@ -220,6 +220,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
         historyManager.remove(id);
     }
+
     @Override
     public List<Task> getHistory() {
         return historyManager.getHistory();
