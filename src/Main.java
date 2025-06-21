@@ -46,10 +46,10 @@ public class Main {
         for (Task task2 : manager.getHistory()) {
             System.out.println(task2);
         }
-        System.out.println("\n"+"-".repeat(15) + "\n");
+        System.out.println("\n" + "-".repeat(15) + "\n");
         System.out.print("Размер истории просмотров : ");
         System.out.println(manager.getHistory().size());
-        System.out.println("\n"+"-".repeat(15) + "\n");
+        System.out.println("\n" + "-".repeat(15) + "\n");
 
         manager.deleteSubTaskForId(subTask.getId());
         manager.deleteSubTaskForId(subTask1.getId());
@@ -59,27 +59,27 @@ public class Main {
         for (Task task2 : manager.getHistory()) {
             System.out.println(task2);
         }
-        System.out.println("\n"+"-".repeat(15) + "\n");
+        System.out.println("\n" + "-".repeat(15) + "\n");
         System.out.print("Размер истории просмотров после удаления : ");
         System.out.println(manager.getHistory().size());
-        System.out.println("\n"+"-".repeat(15) + "\n");
+        System.out.println("\n" + "-".repeat(15) + "\n");
 
         System.out.println("Вывод всех Task:\n");
         System.out.println(manager.getTasks());
-        System.out.println("\n"+"-".repeat(15) + "\n");
+        System.out.println("\n" + "-".repeat(15) + "\n");
         System.out.println("Вывод всех Epic:\n");
         System.out.println(manager.getEpics());
-        System.out.println("\n"+"-".repeat(15) + "\n");
+        System.out.println("\n" + "-".repeat(15) + "\n");
         System.out.println("Вывод SubTask определенного Epic:\n");
         System.out.println(manager.getSubTasksForEpic(epic));
-        System.out.println("\n"+"-".repeat(15) + "\n");
+        System.out.println("\n" + "-".repeat(15) + "\n");
 
         System.out.println("Удаление SubTask по определенному ID.");
         manager.deleteSubTaskForId(subTask1.getId());
 
         System.out.println("Вывод удаленного SubTask:\n");
         System.out.println(manager.getSubTask(subTask1.getId()));
-        System.out.println("\n"+"-".repeat(15) + "\n");
+        System.out.println("\n" + "-".repeat(15) + "\n");
         System.out.println("Вывод всех Epic для проверки Status после удаления SubTask:\n");
         System.out.println(manager.getEpics());
     }
