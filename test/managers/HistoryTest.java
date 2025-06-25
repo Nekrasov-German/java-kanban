@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HistoryTest {
     static TaskManager taskManager;
-    List<Task> history = List.of();
 
     @BeforeEach
     public void createManager() {
@@ -35,7 +34,7 @@ public class HistoryTest {
         taskManager.deleteSubTaskForId(subTask.getId());
         taskManager.deleteSubTaskForId(subTask1.getId());
 
-        history = taskManager.getHistory();
+        List<Task> history = taskManager.getHistory();
 
         List<Integer> epicSubTaskId = epic.getSubTasksId();
 

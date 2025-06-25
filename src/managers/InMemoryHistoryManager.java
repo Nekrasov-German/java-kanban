@@ -29,6 +29,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     @Override
     public void remove(int id) {
         removeNode(nodes.get(id));
+        nodes.remove(id);
     }
 
     private void linkedLast(Task task) {
@@ -65,7 +66,7 @@ public class InMemoryHistoryManager implements HistoryManager {
                 prev.setNext(next);
                 next.setPrev(prev);
             }
-            }
+        }
     }
 
     private List<Task> getTasks() {
