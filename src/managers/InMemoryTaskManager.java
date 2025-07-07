@@ -5,7 +5,7 @@ import tasks.*;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
-    private static final int ERROR_ONE = -1;
+    protected static final int ERROR_ONE = -1;
 
     private final Map<Integer, Task> tasks = new HashMap<>();
     private final Map<Integer, Epic> epics = new HashMap<>();
