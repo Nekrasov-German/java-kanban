@@ -41,8 +41,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private final File file;
-    private final InMemoryTaskManager manager = new InMemoryTaskManager();
-
+    private static final String FILE_HEADER = "id,type,name,status,description,epic\n";
 
     public FileBackedTaskManager(String path) {
         this.file = new File(path);
@@ -51,7 +50,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private void save() {
         try (FileWriter fileWriter = new FileWriter(file)) {
-            fileWriter.write("id,type,name,status,description,epic\n");
+            fileWriter.write(FILE_HEADER);
             for (Task task : super.getTasks()) {
                 fileWriter.write(TasksToString.taskToStringForSave(task));
             }
@@ -112,6 +111,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
+    public void deleteTasks() {
+        super.deleteTasks();
+        save();
+    }
+
+    @Override
     public int createEpic(Epic epic) {
         if (epic.getId() != ERROR_ONE) {
             super.createEpic(epic);
@@ -138,6 +143,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
+    public void deleteEpics() {
+        super.deleteEpics();
+        save();
+    }
+
+    @Override
     public int createSubTask(SubTask subTask) {
         if (subTask.getId() != ERROR_ONE) {
             super.createSubTask(subTask);
@@ -160,6 +171,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     @Override
     public void deleteSubTaskForId(int id) {
         super.deleteSubTaskForId(id);
+        save();
+    }
+
+    @Override
+    public void deleteSubTasks() {
+        super.deleteSubTasks();
         save();
     }
 }
