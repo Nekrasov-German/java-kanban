@@ -12,19 +12,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class FileBackedTaskManagerTest {
+public class FileBackedTaskManagerTest extends InMemoryTaskManagerTest{
     File tempFile = null;
     static FileBackedTaskManager fileBackedTaskManager;
-    Task task = new Task("Задача 1", "Описание первой задачи");
-    Task task1 = new Task("Задача 2","Описание задачи 2");
-    Epic epic = new Epic("Эпик 1", "Описание эпика 1");
-    SubTask subTask = new SubTask("Подзадача 1","Описание подзадачи 1", epic);
-    SubTask subTask1 = new SubTask("Подзадача 2","Описание подзадачи 2", epic);
-    Epic epic1 = new Epic("Эпик 2","Описание Эпика 2");
-    SubTask subTask2 = new SubTask("Подзадача 3","Описание подзадачи 3", epic1);
 
     @BeforeEach
-    void createManager() {
+    void createFileManager() {
         try {
             tempFile = File.createTempFile("test-", ".txt");
             fileBackedTaskManager = new FileBackedTaskManager(tempFile.getPath());

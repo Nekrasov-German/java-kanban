@@ -2,16 +2,35 @@ package helper;
 
 import tasks.*;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
+
 public class TasksToString {
     public static String taskToStringForSave(Task task) {
         String result = "";
         switch (task.getType()) {
-            case TASK, EPIC -> result = String.format("%s,%s,%s,%s,%s,%s",
-                    task.getId(),task.getType(),task.getName(),task.getStatus(), task.getDescription(),"\n");
+            case TASK, EPIC -> result = String.format("%s,%s,%s,%s,%s,%s,%s,%s",
+                    task.getId(),
+                    task.getType(),
+                    task.getName(),
+                    task.getStatus(),
+                    task.getDescription(),
+                    task.getDuration(),
+                    task.getStartTime(),
+                    "\n");
             case SUBTASK -> {
                 SubTask subTask = (SubTask) task;
-                result = String.format("%s,%s,%s,%s,%s,%s", subTask.getId(), subTask.getType(), subTask.getName(),
-                        subTask.getStatus(), subTask.getDescription(), subTask.getEpicId() + "\n");
+                result = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s",
+                        subTask.getId(),
+                        subTask.getType(),
+                        subTask.getName(),
+                        subTask.getStatus(),
+                        subTask.getDescription(),
+                        subTask.getDuration(),
+                        subTask.getStartTime(),
+                        subTask.getEpicId(),
+                        "\n");
             }
         }
         return result;
@@ -27,17 +46,34 @@ public class TasksToString {
             Status status = Status.valueOf(task[3]);
             String description = task[4];
 
-            if (type == Type.TASK) {
-                return new Task(name, description, id, status, type);
-            } else if (type == Type.EPIC) {
-                return new Epic(name, description, id, status, type);
-            } else if (type == Type.SUBTASK) {
-                int idEpic = Integer.parseInt(task[5]);
-                return new SubTask(name, description, id, status, type, idEpic);
-            } else {
-                return null;
+            switch (type) {
+                case Type.TASK -> {
+                    if (task[5].equals("null") && task[6].equals("null")) {
+                        return new Task(name, description, id, status, type);
+                    } else {
+                        Duration duration = Duration.parse(task[5]);
+                        LocalDateTime startTime = LocalDateTime.parse(task[6]);
+                        return new Task(name, description, id, status, type, duration, startTime);
+                    }
+                }
+                case Type.EPIC -> {
+                    return new Epic(name, description, id, status, type);
+                }
+                case Type.SUBTASK -> {
+                    int idEpic = Integer.parseInt(task[7]);
+                    if (task[5].equals("null") && task[6].equals("null")) {
+                        return new SubTask(name, description, id, status, type, idEpic);
+                    } else {
+                        Duration duration = Duration.parse(task[5]);
+                        LocalDateTime startTime = LocalDateTime.parse(task[6]);
+                        return new SubTask(name, description, id, status, type, duration, startTime, idEpic);
+                    }
+                }
+                default -> {
+                    return null;
+                }
             }
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException | DateTimeParseException e) {
             return null;
         }
     }

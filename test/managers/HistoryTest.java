@@ -1,32 +1,35 @@
 package managers;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tasks.Epic;
-import tasks.SubTask;
 import tasks.Task;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class HistoryTest {
-    static TaskManager taskManager;
-
-    @BeforeEach
-    public void createManager() {
-        taskManager = Managers.getDefault();
+public class HistoryTest extends InMemoryTaskManagerTest{
+    @Test
+    void getEmptyHistoryTest() {
+        List<Task> history = taskManager.getHistory();
+        assertEquals(0, history.size(), "История должна быть пустой.");
     }
 
     @Test
-    void historyBeforeDeleteSubTaskTest() {
-        Epic epic = new Epic("Эпик 1", "Описание эпика 1");
-        SubTask subTask = new SubTask("Подзадача 1","Описание подзадачи 1", epic);
-        SubTask subTask1 = new SubTask("Подзадача 2","Описание подзадачи 2", epic);
-        taskManager.createEpic(epic);
-        taskManager.createSubTask(subTask);
-        taskManager.createSubTask(subTask1);
+    void historyAfterRepeatingSubTaskTest() {
+        taskManager.getEpic(epic.getId());
+        taskManager.getSubTask(subTask.getId());
+        taskManager.getSubTask(subTask1.getId());
 
+        taskManager.getEpic(epic.getId());
+        taskManager.getSubTask(subTask.getId());
+        taskManager.getSubTask(subTask1.getId());
+
+        List<Task> history = taskManager.getHistory();
+        assertEquals(3, history.size(), "После повторных добалений не должно быть повторов задач.");
+    }
+
+    @Test
+    void historyAfterDeleteSubTaskTest() {
         taskManager.getEpic(epic.getId());
         taskManager.getSubTask(subTask.getId());
         taskManager.getSubTask(subTask1.getId());
