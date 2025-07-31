@@ -15,11 +15,14 @@ public class Main {
         LocalDateTime time = LocalDateTime.of(2025,7,20,10,0,0);
         Duration duration = Duration.ofMinutes(40);
 
-        LocalDateTime timeSubtask2 = LocalDateTime.of(2025,7,20,9,10,0);
-        Duration durationSubtask2 = Duration.ofMinutes(160);
+        LocalDateTime timeSubtask2 = LocalDateTime.of(2025,7,20,19,10,0);
+        Duration durationSubtask2 = Duration.ofMinutes(60);
 
         LocalDateTime timeSubtask1 = LocalDateTime.of(2025,7,20,11,0,0);
         Duration durationSubtask1 = Duration.ofMinutes(110);
+
+        LocalDateTime timeSubtask3 = LocalDateTime.of(2025,7,20,9,0,0);
+        Duration durationSubtask3 = Duration.ofMinutes(10);
 
         Task task1 = new Task("Задача 1", "Описание первой задачи",duration,time);
         Task task2 = new Task("Задача 2","Описание второй задачи");
@@ -28,7 +31,8 @@ public class Main {
                 timeSubtask1, epicWithSubTasks);
         SubTask subTask2 = new SubTask("Подзадача 2","Описание подзадачи 2", durationSubtask2,
                 timeSubtask2, epicWithSubTasks);
-        SubTask subTask3 = new SubTask("Подзадача 3","Описание подзадачи 3", epicWithSubTasks);
+        SubTask subTask3 = new SubTask("Подзадача 3","Описание подзадачи 3", durationSubtask3,
+                timeSubtask3, epicWithSubTasks);
         Epic epicWithoutSubTask = new Epic("Эпик без подзадач","Описание Эпика без подзадачю");
 
 

@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class FileBackedTaskManagerTest extends InMemoryTaskManagerTest{
+public class FileBackedTaskManagerTest extends TaskManagerTest{
     File tempFile = null;
     static FileBackedTaskManager fileBackedTaskManager;
 
@@ -58,7 +58,7 @@ public class FileBackedTaskManagerTest extends InMemoryTaskManagerTest{
         assertEquals(2,tasks.size(),"После загрузки в новом менеджере должно быть две задачи.");
         assertEquals(2,epics.size(),"После загрузки в новом менеджере должно быть два Эпика.");
         assertEquals(3,subTasks.size(),
-                "После загрузки в новом менеджере должно быть четыре подзадачи.");
+                "После загрузки в новом менеджере должно быть три подзадачи.");
     }
 
     @Test

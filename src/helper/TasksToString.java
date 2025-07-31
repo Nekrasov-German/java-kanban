@@ -18,7 +18,7 @@ public class TasksToString {
                     task.getDescription(),
                     task.getDuration(),
                     task.getStartTime(),
-                    "\n");
+                    System.lineSeparator());
             case SUBTASK -> {
                 SubTask subTask = (SubTask) task;
                 result = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s",
@@ -30,14 +30,14 @@ public class TasksToString {
                         subTask.getDuration(),
                         subTask.getStartTime(),
                         subTask.getEpicId(),
-                        "\n");
+                        System.lineSeparator());
             }
         }
         return result;
 
     }
 
-    public static Task loadFromFileTasks(String taskString) {
+    public static Task loadFromFileTasks(String taskString) throws DateTimeParseException {
         String[] task = taskString.split(",");
         try {
             int id = Integer.parseInt(task[0]);
@@ -48,7 +48,7 @@ public class TasksToString {
 
             switch (type) {
                 case Type.TASK -> {
-                    if (task[5].equals("null") && task[6].equals("null")) {
+                    if ("null".equals(task[5]) && "null".equals(task[6])) {
                         return new Task(name, description, id, status, type);
                     } else {
                         Duration duration = Duration.parse(task[5]);
@@ -61,7 +61,7 @@ public class TasksToString {
                 }
                 case Type.SUBTASK -> {
                     int idEpic = Integer.parseInt(task[7]);
-                    if (task[5].equals("null") && task[6].equals("null")) {
+                    if ("null".equals(task[5]) && "null".equals(task[6])) {
                         return new SubTask(name, description, id, status, type, idEpic);
                     } else {
                         Duration duration = Duration.parse(task[5]);
@@ -73,8 +73,8 @@ public class TasksToString {
                     return null;
                 }
             }
-        } catch (NumberFormatException | DateTimeParseException e) {
-            return null;
+        } catch (NumberFormatException e) {
+           return null;
         }
     }
 }

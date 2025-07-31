@@ -54,7 +54,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private final File file;
-    private static final String FILE_HEADER = "id,type,name,status,description,duration,startTime,epic\n";
+    private static final String FILE_HEADER = "id,type,name,status,description,duration,startTime,epic" +
+            System.lineSeparator();
 
     public FileBackedTaskManager(String path) {
         this.file = new File(path);
