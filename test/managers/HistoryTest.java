@@ -1,5 +1,6 @@
 package managers;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.Task;
 
@@ -7,7 +8,24 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class HistoryTest extends TaskManagerTest{
+public class HistoryTest extends TaskManagerTest<InMemoryTaskManager> {
+
+    @BeforeEach
+    public void createManager() {
+        taskManager = (InMemoryTaskManager) Managers.getDefault();
+        taskManager.createTask(task);
+        taskManager.createTask(task1);
+        taskManager.createEpic(epic);
+        taskManager.createSubTask(subTask);
+        taskManager.createSubTask(subTask1);
+        taskManager.createEpic(epic1);
+        taskManager.createSubTask(subTask2);
+        taskManager.createEpic(epic2);
+        taskManager.createSubTask(subTask3);
+        taskManager.createSubTask(subTask4);
+        taskManager.createSubTask(subTask5);
+    }
+
     @Test
     void getEmptyHistoryTest() {
         List<Task> history = taskManager.getHistory();

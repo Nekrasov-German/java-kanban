@@ -10,17 +10,28 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class FileBackedTaskManagerTest extends TaskManagerTest{
+public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager>{
     File tempFile = null;
-    static FileBackedTaskManager fileBackedTaskManager;
+    FileBackedTaskManager taskManagerEmpty;
 
     @BeforeEach
-    void createFileManager() {
+    public void createManager() {
         try {
             tempFile = File.createTempFile("test-", ".txt");
-            fileBackedTaskManager = new FileBackedTaskManager(tempFile.getPath());
+            taskManager = new FileBackedTaskManager(tempFile.getPath());
+            taskManager.createTask(task);
+            taskManager.createTask(task1);
+            taskManager.createEpic(epic);
+            taskManager.createSubTask(subTask);
+            taskManager.createSubTask(subTask1);
+            taskManager.createEpic(epic1);
+            taskManager.createSubTask(subTask2);
+            taskManager.createEpic(epic2);
+            taskManager.createSubTask(subTask3);
+            taskManager.createSubTask(subTask4);
+            taskManager.createSubTask(subTask5);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
@@ -30,9 +41,17 @@ public class FileBackedTaskManagerTest extends TaskManagerTest{
 
     @Test
     void loadEmptyFileManagerTest() {
-        List<Task> tasks = fileBackedTaskManager.getTasks();
-        List<Epic> epics = fileBackedTaskManager.getEpics();
-        List<SubTask> subTasks = fileBackedTaskManager.getSubTasks();
+        try {
+            tempFile = File.createTempFile("test-", ".txt");
+            taskManagerEmpty = new FileBackedTaskManager(tempFile.getPath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            tempFile.delete();
+        }
+        List<Task> tasks = taskManagerEmpty.getTasks();
+        List<Epic> epics = taskManagerEmpty.getEpics();
+        List<SubTask> subTasks = taskManagerEmpty.getSubTasks();
 
         assertEquals(0,tasks.size(),"В пустом менеджере не должно быть Task.");
         assertEquals(0,epics.size(),"В пустом менеджере не должно быть Epic.");
@@ -41,13 +60,7 @@ public class FileBackedTaskManagerTest extends TaskManagerTest{
 
     @Test
     void loadNotEmptyFileManagerTest() {
-        fileBackedTaskManager.createTask(task);
-        fileBackedTaskManager.createTask(task1);
-        fileBackedTaskManager.createEpic(epic);
-        fileBackedTaskManager.createSubTask(subTask);
-        fileBackedTaskManager.createSubTask(subTask1);
-        fileBackedTaskManager.createEpic(epic1);
-        fileBackedTaskManager.createSubTask(subTask2);
+        taskManager.createSubTask(subTask2);
 
         FileBackedTaskManager fileBackedTaskManagerTest = new FileBackedTaskManager(tempFile.getPath());
 
@@ -55,25 +68,19 @@ public class FileBackedTaskManagerTest extends TaskManagerTest{
         List<Epic> epics = fileBackedTaskManagerTest.getEpics();
         List<SubTask> subTasks = fileBackedTaskManagerTest.getSubTasks();
 
+        assertDoesNotThrow(()-> new FileBackedTaskManager(tempFile.getPath()));
+
         assertEquals(2,tasks.size(),"После загрузки в новом менеджере должно быть две задачи.");
-        assertEquals(2,epics.size(),"После загрузки в новом менеджере должно быть два Эпика.");
-        assertEquals(3,subTasks.size(),
-                "После загрузки в новом менеджере должно быть три подзадачи.");
+        assertEquals(3,epics.size(),"После загрузки в новом менеджере должно быть три Эпика.");
+        assertEquals(5,subTasks.size(),
+                "После загрузки в новом менеджере должно быть пять подзадач.");
     }
 
     @Test
     void loadBeforeDeleteTaskFileManagerTest() {
-        fileBackedTaskManager.createTask(task);
-        fileBackedTaskManager.createTask(task1);
-        fileBackedTaskManager.createEpic(epic);
-        fileBackedTaskManager.createSubTask(subTask);
-        fileBackedTaskManager.createSubTask(subTask1);
-        fileBackedTaskManager.createEpic(epic1);
-        fileBackedTaskManager.createSubTask(subTask2);
-
-        fileBackedTaskManager.deleteTaskForId(task.getId());
-        fileBackedTaskManager.deleteEpicForId(epic1.getId());
-        fileBackedTaskManager.deleteSubTaskForId(subTask.getId());
+        taskManager.deleteTaskForId(task.getId());
+        taskManager.deleteEpicForId(epic1.getId());
+        taskManager.deleteSubTaskForId(subTask.getId());
 
         FileBackedTaskManager fileBackedTaskManagerTest = new FileBackedTaskManager(tempFile.getPath());
 
@@ -82,8 +89,8 @@ public class FileBackedTaskManagerTest extends TaskManagerTest{
         List<SubTask> subTasks = fileBackedTaskManagerTest.getSubTasks();
 
         assertEquals(1,tasks.size(),"После загрузки в новом менеджере должно быть одна задача.");
-        assertEquals(1,epics.size(),"После загрузки в новом менеджере должно быть один Эпик.");
-        assertEquals(1,subTasks.size(),
-                "После загрузки в новом менеджере должно быть одна подзадача.");
+        assertEquals(2,epics.size(),"После загрузки в новом менеджере должно быть два Эпик.");
+        assertEquals(3,subTasks.size(),
+                "После загрузки в новом менеджере должно быть три подзадачи.");
     }
 }

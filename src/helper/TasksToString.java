@@ -74,7 +74,8 @@ public class TasksToString {
                 }
             }
         } catch (NumberFormatException e) {
-           return null;
+            e.printStackTrace();
+            return null;
         }
     }
 }
