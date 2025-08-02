@@ -8,15 +8,29 @@ import tasks.Task;
 import tasks.Type;
 
 import java.io.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     public static void main(String[] args) {
         TaskManager fileBackedTaskManager = new FileBackedTaskManager("Test.CSV");
-        Task task1 = new Task("Задача 1", "Описание первой задачи");
+
+        LocalDateTime time = LocalDateTime.of(2025,7,20,13,0,0);
+        Duration duration = Duration.ofMinutes(25);
+
+        LocalDateTime timeSubtask2 = LocalDateTime.of(2025,7,20,13,0,0);
+        Duration durationSubtask2 = Duration.ofMinutes(110);
+
+        LocalDateTime timeSubtask1 = LocalDateTime.of(2025,7,20,16,0,0);
+        Duration durationSubtask1 = Duration.ofMinutes(40);
+
+        Task task1 = new Task("Задача 1", "Описание первой задачи",duration,time);
         Task task2 = new Task("Задача 2", "Описание первой задачи");
         Epic epicWithSubTasks = new Epic("Эпик с тремя подзадачами", "Содержит три подзадачи.");
-        SubTask subTask1 = new SubTask("Подзадача 1","Описание подзадачи 1", epicWithSubTasks);
-        SubTask subTask2 = new SubTask("Подзадача 2","Описание подзадачи 2", epicWithSubTasks);
+        SubTask subTask1 = new SubTask("Подзадача 1","Описание подзадачи 1", durationSubtask1,
+                timeSubtask1, epicWithSubTasks);
+        SubTask subTask2 = new SubTask("Подзадача 2","Описание подзадачи 2", durationSubtask2,
+                timeSubtask2, epicWithSubTasks);
         SubTask subTask3 = new SubTask("Подзадача 3","Описание подзадачи 3", epicWithSubTasks);
         Epic epicWithoutSubTask = new Epic("Эпик без подзадач","Описание Эпика без подзадачю");
 
@@ -37,11 +51,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         for (Epic epic : fileBackedTaskManager.getEpics()) {
             System.out.println(epic);
         }
-
     }
 
     private final File file;
-    private static final String FILE_HEADER = "id,type,name,status,description,epic\n";
+    private static final String FILE_HEADER = "id,type,name,status,description,duration,startTime,epic" +
+            System.lineSeparator();
 
     public FileBackedTaskManager(String path) {
         this.file = new File(path);

@@ -34,12 +34,15 @@ public class Epic extends Task {
     @Override
     public String toString() {
         return "\nEpic{" +
-                "\nsubTasksId=" + subTasksId +
+                "\nsubTasksId=" + getSubTasksId() +
                 ", \nname='" + name + '\'' +
                 ", \ndescription='" + description + '\'' +
                 ", \nid=" + id +
                 ", \nstatus=" + status +
                 ", \ntype=" + type +
+                ", \nduration=" + getDurationFormat(duration) +
+                ", \nstartTime=" + getTimeFormat(startTime) +
+                ", \nendTime=" + getTimeFormat(getEndTime()) +
                 '}';
     }
 }
