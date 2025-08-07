@@ -141,9 +141,9 @@ public class InMemoryTaskManager implements TaskManager {
         if (task != null && task.getType() == Type.TASK) {
             if (!isNotIntersectionTask(task)) {
                 tasks.put(task.getId(), task);
+                addPrioritizedTask(task);
+                return task.getId();
             }
-            addPrioritizedTask(task);
-            return task.getId();
         }
         return ERROR_ONE;
     }
@@ -153,9 +153,9 @@ public class InMemoryTaskManager implements TaskManager {
         if (task != null && task.getType() == Type.TASK && tasks.containsKey(task.getId())) {
             if (!isNotIntersectionTask(task)) {
                 tasks.put(task.getId(), task);
+                addPrioritizedTask(task);
+                return task.getId();
             }
-            addPrioritizedTask(task);
-            return task.getId();
         }
         return ERROR_ONE;
     }
@@ -275,8 +275,8 @@ public class InMemoryTaskManager implements TaskManager {
                 epics.get(subTask.getEpicId()).setSubTasksId(subTask);
                 updateEpicStatus(epics.get(subTask.getEpicId()));
                 updateEpicStartTimeAndEndTime(epics.get(subTask.getEpicId()));
+                return subTask.getId();
             }
-            return subTask.getId();
         }
         return ERROR_ONE;
     }
@@ -289,8 +289,8 @@ public class InMemoryTaskManager implements TaskManager {
                 addPrioritizedTask(subTask);
                 updateEpicStatus(epics.get(subTask.getEpicId()));
                 updateEpicStartTimeAndEndTime(epics.get(subTask.getEpicId()));
+                return subTask.getId();
             }
-            return subTask.getId();
         }
         return ERROR_ONE;
     }
