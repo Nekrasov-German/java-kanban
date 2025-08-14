@@ -7,6 +7,7 @@ import com.sun.net.httpserver.HttpServer;
 import managers.Managers;
 import managers.TaskManager;
 import tasks.Epic;
+import tasks.Status;
 import tasks.SubTask;
 import tasks.Task;
 
@@ -79,6 +80,11 @@ public class HttpTaskServer implements HttpHandler {
     public static void main(String[] args) throws IOException {
         TaskManager taskManager = Managers.getDefault();
         HttpTaskServer server = new HttpTaskServer(taskManager);
+
+        LocalDateTime time = LocalDateTime.of(2025,7,20,10,0,0);
+        Duration duration = Duration.ofMinutes(40);
+        Task task1 = new Task("Задача 1", "Описание первой задачи",duration,time);
+        taskManager.createTask(task1);
 
         server.getServer().createContext("/tasks", server);
         server.getServer().createContext("/subtasks", server);
@@ -183,7 +189,7 @@ public class HttpTaskServer implements HttpHandler {
                         if (id == ERROR_ONE) {
                             BaseHttpHandler.sendHasOverlaps(httpExchange, "Not Acceptable");
                         } else {
-                            BaseHttpHandler.send(httpExchange);
+                            BaseHttpHandler.send(httpExchange, "Task id: " + id + " добавлена в менеджер.");
                         }
                     } catch (NullPointerException e) {
                         BaseHttpHandler.sendHasOverlaps(httpExchange, "Not Acceptable");
@@ -210,7 +216,7 @@ public class HttpTaskServer implements HttpHandler {
                         if (id == ERROR_ONE) {
                             BaseHttpHandler.sendHasOverlaps(httpExchange, "Not Acceptable");
                         } else {
-                            BaseHttpHandler.send(httpExchange);
+                            BaseHttpHandler.send(httpExchange,"SubTask id: " + id + " добавлена в менеджер.");
                         }
                     } catch (NullPointerException e) {
                         BaseHttpHandler.sendHasOverlaps(httpExchange, "Not Acceptable");
@@ -229,7 +235,7 @@ public class HttpTaskServer implements HttpHandler {
                         if (id == ERROR_ONE) {
                             BaseHttpHandler.sendHasOverlaps(httpExchange, "Not Acceptable");
                         } else {
-                            BaseHttpHandler.send(httpExchange);
+                            BaseHttpHandler.send(httpExchange,"Epic id: " + id + " добавлен в менеджер.");
                         }
                     } catch (NullPointerException e) {
                         BaseHttpHandler.sendHasOverlaps(httpExchange, "Not Acceptable");
@@ -258,7 +264,8 @@ public class HttpTaskServer implements HttpHandler {
                 case "tasks" -> {
                     try {
                         if (manager.getTask(id) != null) {
-                            Task task;
+                            Task task = manager.getTask(id);
+                            Status status = task.getStatus();
                             JsonObject jsonObject = json.fromJson(requestBody, JsonObject.class);
 
                             String name = jsonObject.get("name").getAsString();
@@ -266,16 +273,16 @@ public class HttpTaskServer implements HttpHandler {
                             try {
                                 Duration duration = Duration.ofMinutes(jsonObject.get("duration").getAsLong());
                                 LocalDateTime localDateTime = LocalDateTime.parse(jsonObject.get("startTime").getAsString());
-                                task = new Task(name, description, duration, localDateTime);
+                                task = new Task(name, description, id, status, tasks.Type.TASK, duration, localDateTime);
                             } catch (NullPointerException | DateTimeParseException e) {
-                                task = new Task(name, description);
+                                task = new Task(name, description, id, status, tasks.Type.TASK);
                             }
 
                             int idTask = manager.updateTask(task);
                             if (idTask == ERROR_ONE) {
                                 BaseHttpHandler.sendNotFound(httpExchange, "Not Found");
                             } else {
-                                BaseHttpHandler.send(httpExchange);
+                                BaseHttpHandler.send(httpExchange, "Task id: " + id + " обновлена в менеджере.");
                             }
                         } else {
                             BaseHttpHandler.sendNotFound(httpExchange, "Not Found");
@@ -288,7 +295,8 @@ public class HttpTaskServer implements HttpHandler {
                 case "subtasks" -> {
                     try {
                         if (manager.getSubTask(id) != null) {
-                            SubTask subTask;
+                            SubTask subTask = manager.getSubTask(id);
+                            Status status = subTask.getStatus();
                             JsonObject jsonObject = json.fromJson(requestBody, JsonObject.class);
 
                             String name = jsonObject.get("name").getAsString();
@@ -297,16 +305,17 @@ public class HttpTaskServer implements HttpHandler {
                             try {
                                 Duration duration = Duration.ofMinutes(jsonObject.get("duration").getAsLong());
                                 LocalDateTime localDateTime = LocalDateTime.parse(jsonObject.get("startTime").getAsString());
-                                subTask = new SubTask(name, description, duration, localDateTime, epicId);
+                                subTask = new SubTask(name, description,id, status, tasks.Type.SUBTASK, duration,
+                                        localDateTime, epicId);
                             } catch (NullPointerException | DateTimeParseException e) {
-                                subTask = new SubTask(name, description, epicId);
+                                subTask = new SubTask(name, description, id, status, tasks.Type.SUBTASK, epicId);
                             }
 
-                            int idSubTask = manager.createSubTask(subTask);
+                            int idSubTask = manager.updateSubTask(subTask);
                             if (idSubTask == ERROR_ONE) {
                                 BaseHttpHandler.sendNotFound(httpExchange, "Not Found");
                             } else {
-                                BaseHttpHandler.send(httpExchange);
+                                BaseHttpHandler.send(httpExchange, "SubTask id: " + id + " обновлена в менеджер.");
                             }
                         } else {
                             BaseHttpHandler.sendNotFound(httpExchange, "Not Found");

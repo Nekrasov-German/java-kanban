@@ -270,12 +270,14 @@ public class InMemoryTaskManager implements TaskManager {
     public int createSubTask(SubTask subTask) {
         if (subTask != null && subTask.getType() == Type.SUBTASK) {
             if (!isNotIntersectionTask(subTask)) {
-                subTasks.put(subTask.getId(), subTask);
-                addPrioritizedTask(subTask);
-                epics.get(subTask.getEpicId()).setSubTasksId(subTask);
-                updateEpicStatus(epics.get(subTask.getEpicId()));
-                updateEpicStartTimeAndEndTime(epics.get(subTask.getEpicId()));
-                return subTask.getId();
+                if (epics.containsKey(subTask.getEpicId())) {
+                    subTasks.put(subTask.getId(), subTask);
+                    addPrioritizedTask(subTask);
+                    epics.get(subTask.getEpicId()).setSubTasksId(subTask);
+                    updateEpicStatus(epics.get(subTask.getEpicId()));
+                    updateEpicStartTimeAndEndTime(epics.get(subTask.getEpicId()));
+                    return subTask.getId();
+                }
             }
         }
         return ERROR_ONE;

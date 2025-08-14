@@ -14,9 +14,11 @@ public class BaseHttpHandler {
         h.close();
     }
 
-    protected static void send(HttpExchange h) throws IOException {
+    protected static void send(HttpExchange h, String text) throws IOException {
+        byte[] resp = text.getBytes(StandardCharsets.UTF_8);
         h.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
-        h.sendResponseHeaders(201, 0);
+        h.sendResponseHeaders(201, resp.length);
+        h.getResponseBody().write(resp);
         h.close();
     }
 

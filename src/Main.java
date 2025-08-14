@@ -35,7 +35,6 @@ public class Main {
                 timeSubtask3, epicWithSubTasks.getId());
         Epic epicWithoutSubTask = new Epic("Эпик без подзадач","Описание Эпика без подзадачю");
 
-
         manager.createTask(task1);
         manager.createTask(task2);
         manager.createEpic(epicWithoutSubTask);
