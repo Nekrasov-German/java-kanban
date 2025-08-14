@@ -103,7 +103,7 @@ public class Task {
 
     public String getTimeFormat(LocalDateTime dateTime) {
         if (dateTime != null) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(" HH:mm:ss");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy:MM:dd HH:mm:ss");
             return formatter.format(dateTime);
         }
         return "Время не задано.";

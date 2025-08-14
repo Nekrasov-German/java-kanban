@@ -28,13 +28,12 @@ public class Main {
         Task task2 = new Task("Задача 2","Описание второй задачи");
         Epic epicWithSubTasks = new Epic("Эпик с тремя подзадачами", "Содержит три подзадачи.");
         SubTask subTask1 = new SubTask("Подзадача 1","Описание подзадачи 1", durationSubtask1,
-                timeSubtask1, epicWithSubTasks);
+                timeSubtask1, epicWithSubTasks.getId());
         SubTask subTask2 = new SubTask("Подзадача 2","Описание подзадачи 2", durationSubtask2,
-                timeSubtask2, epicWithSubTasks);
+                timeSubtask2, epicWithSubTasks.getId());
         SubTask subTask3 = new SubTask("Подзадача 3","Описание подзадачи 3", durationSubtask3,
-                timeSubtask3, epicWithSubTasks);
+                timeSubtask3, epicWithSubTasks.getId());
         Epic epicWithoutSubTask = new Epic("Эпик без подзадач","Описание Эпика без подзадачю");
-
 
         manager.createTask(task1);
         manager.createTask(task2);

@@ -21,7 +21,7 @@ class SubTaskTest {
     public void addNewSubTaskTest() {
         Epic epic = new Epic("Эпик 1", "Описание эпика 1");
         taskManager.createEpic(epic);
-        SubTask subTask = new SubTask("Подзадача 1","Описание подзадачи 1", epic);
+        SubTask subTask = new SubTask("Подзадача 1","Описание подзадачи 1", epic.getId());
         int idSubTask = taskManager.createSubTask(subTask);
         final SubTask subTask1 = taskManager.getSubTask(idSubTask);
 
